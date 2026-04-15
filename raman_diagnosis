@@ -1,1 +1,254 @@
 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>拉曼光谱诊断系统 V1.0 - 演示版</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin-top: 1rem;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: none;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        .demo-badge {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 999;
+        }
+        .alert-demo {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 演示提示横幅 -->
+    <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
+        <strong>📱 演示版本说明</strong><br>
+        本界面为系统功能展示，所有按钮点击后会弹出提示框，<strong>不执行实际数据处理</strong>。扫码即可预览操作流程。
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <!-- 卡片式登录/主界面（模拟登录状态） -->
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h3>基于拉曼光谱机器学习的</h3>
+            <h4>18三体产前诊断系统 V1.0</h4>
+            <span class="badge bg-warning text-dark mt-2">演示版本</span>
+        </div>
+        <div class="card-body">
+            <!-- 模拟已登录用户信息栏 -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">欢迎，<strong>演示用户</strong></span>
+                <button class="btn btn-sm btn-outline-secondary" onclick="alert('演示版：退出登录仅为界面模拟。')">退出</button>
+            </div>
+
+            <!-- 标签页 -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="train-tab" data-bs-toggle="tab" data-bs-target="#train" type="button" role="tab">模型训练</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="predict-tab" data-bs-toggle="tab" data-bs-target="#predict" type="button" role="tab">预测</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-3">
+                <!-- 训练面板 -->
+                <div class="tab-pane fade show active" id="train" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">训练新模型</div>
+                        <div class="card-body">
+                            <form onsubmit="event.preventDefault(); alert('演示版：训练功能未启用，实际系统将在此处进行光谱数据预处理、PCA降维、模型训练与评估。');">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">训练样本（xlsx文件，多选）</label>
+                                        <input type="file" class="form-control" multiple accept=".xlsx" disabled>
+                                        <div class="form-text">演示版：文件选择已禁用</div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">背景文件（xlsx）</label>
+                                        <input type="file" class="form-control" accept=".xlsx" disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label>阴性关键词</label>
+                                        <input type="text" class="form-control" value="CAN" disabled>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>阳性关键词</label>
+                                        <input type="text" class="form-control" value="CA18" disabled>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>训练集比例</label>
+                                        <input type="range" class="form-range" value="0.7" disabled>
+                                        <output>0.7</output>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" checked disabled>
+                                            <label class="form-check-label">自动选择主成分个数</label>
+                                        </div>
+                                        <div>
+                                            <label>累计贡献率阈值</label>
+                                            <input type="number" class="form-control" value="0.95" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>模型名称</label>
+                                        <input type="text" class="form-control" value="my_model" disabled>
+                                        <label class="mt-2">模型类型</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" checked disabled> 随机森林
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" disabled> SVM
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" disabled> KNN
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label>数据增强倍数</label>
+                                        <input type="number" class="form-control" value="0" min="0" max="5" disabled>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-2">开始训练（演示）</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 模拟训练结果表格 -->
+                    <div class="card mt-4">
+                        <div class="card-header">训练结果（测试集）- 示例数据</div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr><th>模型</th><th>AUC</th><th>准确率</th><th>精确率</th><th>召回率</th><th>F1</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>RF</td><td>0.9970</td><td>0.9231</td><td>1.0000</td><td>0.7692</td><td>0.8696</td></tr>
+                                    <tr><td>SVM</td><td>0.9852</td><td>0.9231</td><td>0.9167</td><td>0.8462</td><td>0.8800</td></tr>
+                                    <tr><td>KNN</td><td>0.9482</td><td>0.8974</td><td>0.9091</td><td>0.7692</td><td>0.8333</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="text-muted small">* 演示数据，实际系统根据上传数据动态生成。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预测面板 -->
+                <div class="tab-pane fade" id="predict" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header">使用已训练模型预测</div>
+                        <div class="card-body">
+                            <form onsubmit="event.preventDefault(); alert('演示版：预测功能未启用，实际系统将调用已保存模型对上传样本进行分类。');">
+                                <div class="mb-3">
+                                    <label>选择模型</label>
+                                    <select class="form-select" disabled>
+                                        <option>my_model_rf.joblib (示例)</option>
+                                        <option>my_model_svm.joblib (示例)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>待预测样本（xlsx文件，多选）</label>
+                                    <input type="file" class="form-control" multiple accept=".xlsx" disabled>
+                                </div>
+                                <button type="submit" class="btn btn-success">开始预测（演示）</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- 模拟预测结果表格 -->
+                    <div class="card mt-4">
+                        <div class="card-header">预测结果 - 示例</div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead><tr><th>文件名</th><th>预测类别</th><th>概率(positive)</th></tr></thead>
+                                <tbody>
+                                    <tr><td>sample1.xlsx</td><td>positive</td><td>0.9823</td></tr>
+                                    <tr><td>sample2.xlsx</td><td>negative</td><td>0.1256</td></tr>
+                                    <tr><td>sample3.xlsx</td><td>positive</td><td>0.9971</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="text-muted small">* 演示数据，实际系统根据上传文件和所选模型实时预测。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted text-center">
+            系统演示版 | 完整功能需部署后端服务 | 扫码查看操作界面
+        </div>
+    </div>
+</div>
+<div class="demo-badge">
+    扫码演示 · 仅限界面预览
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 添加额外的交互提示，使演示更友好
+    document.querySelectorAll('.btn, .nav-link, .form-check-input, input, select').forEach(el => {
+        if (!el.disabled && (el.tagName === 'BUTTON' || el.classList.contains('nav-link'))) {
+            // 对按钮和标签页添加提示，但不干扰原有 alert（如果已经绑定）
+            if (el.getAttribute('onclick')) return;
+            el.addEventListener('click', function(e) {
+                if (el.classList.contains('nav-link')) return; // 标签页切换不弹窗
+                if (el.type === 'submit' || el.classList.contains('btn')) {
+                    // 按钮已经由表单的 onsubmit 处理，避免重复
+                    return;
+                }
+                alert('演示版：此控件仅用于展示界面布局，实际功能未开放。');
+            });
+        }
+    });
+    // 模拟标签页切换时不弹窗
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            // 正常切换，不弹窗
+        });
+    });
+</script>
+</body>
+</html>
